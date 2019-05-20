@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+        .ball{
+            width:15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+        
+        <input type="button" value="toggle" @click="flag=!flag">
+        <transition name="" mode="" 
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:after-enter="afterEnter"
+        >
+            <div class="ball" v-if="flag"></div>
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'hello world',
+                flag:false
+            },
+            methods: {
+                //动画钩子函数的第一个参数el 表示要执行动画的元素，是个原生的jsDom对象
+                //el = document.getELementById()
+                beforeEnter(el){
+                    //动画入场之前，此时动画尚未开始，可以在beforEenter中，可以设置元素设置动画之前的起始样式
+                    //设置小球开始动画之前的起始位置
+                    el.style.transform = "translate(0,0)";
+                },
+                enter(el,done){
+                    //这句话没有实际的作用，但是如果不写，出不来动画效果
+                    //可以认为，el.offsetWidth会强制动画刷新
+                    el.offsetWidth;
+                    //表示动画开始之后的样式，这里可以设置元素完成动画之后的结束状态
+                    el.style.transform = "translate(150px,450px)";
+                    el.style.transition = 'all 1s ease-in-out';
+                    //这里的done，就是afterEnter函数，done是afterenter函数的引用
+                    done();
+                },
+                afterEnter(el){
+                    
+                    this.flag = !this.flag;
+                },
+
+            },
+            filters: {
+                
+            },
+            directives: {
+                
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+        <!-- 迭代普通数组 -->
+        <p v-for="(item,index) in list">{{item}}</p> 
+        <!-- 迭代对象数组 -->
+        <p v-for="(item,index) in arraylist">-----name:{{item.name}}------age:{{item.age}}</p>
+        <!-- 迭代对象 -->
+        <p v-for="(val,key,index) in user">---值是{{val}},---键是{{key}}---索引{{index}}</p>
+        <!-- 迭代数字 -->
+        <p v-for="count in 6">{{count}}</p>
+        <div>
+            <label>name:
+                <input type="text" v-model="name">
+            </label>
+            <label>age:
+                <input type="text" v-model="age">
+            </label>
+            <input type="button" value="添加" @click="add">
+        </div>
+        <p v-for="(item,index) in arraylist" :key="item.name">
+            <input type="checkbox" >
+            {{item.name}}-------age:{{item.age}}
+        </p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:"hello world",
+                list:[1,2,3,4,5,6],
+                arraylist:[{
+                    name:'aaron',
+                    age:'21'
+                },{
+                    name:'zs',
+                    age:'22'
+                },{
+                    name:'ls',
+                    age:'22'
+                },{
+                    name:"wem",
+                    age:'18'
+                }],
+                user:{
+                    id:'1',
+                    name:'aaron',
+                    gender:'男'
+                },
+                name:'',
+                age:''
+            },
+            methods: {
+                add(){
+                    this.arraylist.unshift({name:this.name,age:this.age});
+                }
+            }
+        })
+    </script>
+</body>
+</html>

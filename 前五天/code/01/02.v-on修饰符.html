@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+        .inner{
+            height: 150px;
+            background-color: aqua;
+        }
+        .outer{
+            padding: 40px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p>{{msg}}</p>
+        <!-- <div class="inner" @click.self="div">
+            <input type="button" value="戳我" @click="btn">
+        </div> -->
+        <div class="outer" @click="outer">
+            <div class="inner" @click="div">
+                <input type="button" value="戳我" @click.stop="btn">
+            </div>
+        </div>
+        <a href="https://www.baidu.com" @click.once.prevent="linkClick">有问题去百度</a>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:"hello world",
+            },
+            methods: {
+                div(){
+                    console.log('div');
+                },
+                btn(){
+                    console.log('btn');
+                },
+                outer(){
+                    console.log('outer');
+                },
+                linkClick(){
+                    console.log('阻止默认行为');
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>

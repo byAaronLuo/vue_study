@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+        <style>
+            [v-cloak]{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <p v-cloak>1214124</p>
+            <p v-text="msg">=========</p>
+            <p v-html="msg2"></p>
+            <input type="button" value="按钮" v-bind:title="mytitle" @click="alert"/>
+            <input type="button" value="按钮" :title = "mytitle" id="btn">
+        </div>
+        <script>
+            var vm = new Vue({
+                el:'#app', // 控制区域
+                data:{
+                    msg:'123',
+                    msg2:`<h1>ssssss</h1>`,
+                    mytitle:'自定义title1231'
+                },// 数据
+                methods:{ //这个methods属性中定义了当前vue实例所有可用的方法
+                    alert:function(){
+                        alert('hello');
+                    }
+                }
+            })
+            document.getElementById("btn").onclick = function(){
+                alert(1);
+            }
+        </script>
+    </body>
+</html>

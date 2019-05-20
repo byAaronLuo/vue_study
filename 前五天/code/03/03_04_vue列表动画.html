@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <style>
+        li{
+            border: 1px dashed #999;
+            line-height: 35px;
+            margin: 5px;
+            padding: 5px; 
+             width: 100%; 
+        }
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateY(80px);
+        }
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 1s ease-in-out;
+        }
+        /* v-move,和.v-leave-active配合使用，可以实现列表渐渐的效果 */
+        .v-move{
+            transition: all 1s ease-in-out;
+        }
+        .v-leave-active{
+            position: absolute;
+        }
+        li:hover{
+            background-color: yellow;
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+           <label for="id">
+               id:
+               <input type="text" v-model="id" v-focus>
+           </label>
+           <label for="">
+                name:
+                <input type="text" v-model="name">
+            </label>
+            <input type="button" value="toggle" @click="add">
+        </div>
+        <!-- <ul> -->
+            <!-- 通过为transition-group 设置tag属性，指定transition-group渲染为tag属性的值 -->
+        <transition-group tag="ul" name="" appear>
+            <!-- 在实现列表过渡的时候，如果需要过渡的元素，是通过V-for循环渲染出来的，不能使用transition，而使用transition-Group -->
+            <!-- 如果为v-for循环创建的元素设置动画，必须为每个元素设置:key属性 -->
+            <!-- gettransition-group 添加appear属性，实现入场时候的效果 -->
+            <li v-for="(item,index) in list" :key="item.id" @click="del(index)">
+                {{item.id}}-------{{item.name}}
+            </li>
+        </transition-group>
+    <!-- </ul> -->
+        
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                list:[{
+                    id:1,
+                    name:'a'
+                },{
+                    id:2,
+                    name:'b'
+                },{
+                    id:3,
+                    name:'c'
+                },{
+                    id:4,
+                    name:'d'
+                }],
+                id:'',
+                name:''
+            },
+            methods: {
+                add(){
+                    this.list.push({id:this.id,name:this.name});
+                    this.id = '';
+                    this.name='';
+                },
+                del(i){
+                    this.list.splice(i,1);
+                }
+            },
+            filters: {
+                
+            },
+            directives: {
+                'focus':{
+                    inserted(el){
+                        el.focus();
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

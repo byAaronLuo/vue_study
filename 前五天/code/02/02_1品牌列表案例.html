@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div class="panel-body form-inline">
+            <label for="">id:
+                <input type="text" class="form-control" v-model="id"> 
+            </label>
+            <label for="">name:
+                <input type="text" class="form-control" v-model="name" @keyup.enter="add">
+            </label>
+
+
+            <input type="button" value="添加" class="btn btn-primary" @click="add()"> 
+            
+            <label for="">搜索关键字</label>
+            <!-- vue中所有的指令，在调用的时候都以V-开头 -->
+            <input type="text" class="form-control" id = "search" v-model="keywords" v-focus>
+        </div>
+        <table class="table tabel-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>添加时间</th>
+                    <th>operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.time | dataFormat('yyyy-mm-dd')}}</td>
+                    <td>
+                        <a href="#" @click.prevent="deleteIt(item.id)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="app2">
+       <div v-color="'red'" v-fontweight="900" v-fontsize="25">{{new Date() | dataFormat('')}}</div> 
+    </div>
+    <script>
+        
+        //全局过滤器 ，所有vue实例都可以使用
+        Vue.filter('dataFormat',function(dateStr,pattern){
+            var dt =  new Date(dateStr);
+            var year = dt.getFullYear();
+            var month = dt.getMonth()+1;
+            var day = dt.getDate();
+            return `${year}-${month}-${day}`;
+        });
+        // 使用directive定义全局指令
+        // 其中参数1：指令的名称，注意在指令的名称前面不需要加v-的前缀，在调用的时候，必须在调用指令的名称前，加上V-前缀来调用
+        // 参数2: 是一个对象，在对象上，有一些指令相关的函数，这些函数可以在特定的阶段，执行相关的操作
+        Vue.directive('focus',{
+            bind(el){
+                //el.focus();
+            },
+            inserted(el){
+                el.focus();
+            },
+            updated(el){
+                //el.focus();
+            }
+        });
+
+        //定义一个设置字体颜色的指令
+        Vue.directive('color',{
+            //样式，只要通过指令绑定给了元素，不管这个元素有没有被插入到页面中去，这个元素肯定有一个内联的样式
+            //将来元素肯定会显示到页面中，这时候，浏览器渲染引擎必然会解析样式，应用给这个元素
+            bind(el,binding){
+                console.log(binding);
+                el.style.color = binding.value;
+            }
+        });
+
+        //函数简写
+        //大多数情况下
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'hello world',
+                list:[{
+                    id:'1',
+                    name:'奔驰',
+                    time:new Date(),
+                },{
+                    id:'2',
+                    name:'bmw',
+                    time: new Date(),
+                }],
+                id:'',
+                name:'',
+                keywords:''
+            },
+            methods: {
+                add(){
+                   let obj = {};
+                   obj.id = this.id;
+                   obj.name = this.name;
+                   obj.time = new Date();
+                   this.list.push(obj);
+                   this.id = '';
+                   this.name = '';
+                },
+                deleteIt(id){
+                    // this.list.some((item,index)=>{
+                    //     if(item.id == id){
+                    //         this.list.splice(index,1);
+                    //         return true;
+                    //     }
+                    // })
+                    let index = this.list.findIndex(item => {
+                        if(item.id == id){
+                            return true;
+                        }
+                    });
+                    this.list.splice(index,1);
+                },
+                search(keywords){
+                    if(keywords == ''){
+                        return this.list;
+                    }else{
+                        let newList = [];
+                        this.list.forEach(item=>{
+                            if(item.name.indexOf(keywords)!=-1){
+                                newList.push(item);
+                            }
+                        });
+                        return newList;
+                    }
+                }
+            }
+        })
+
+        var vm2 = new Vue({
+            el:'#app2',
+            data:{},
+            filters: { //定义私有过滤器 过滤器有两个条件，名称和处理函数
+                // 过滤器调用的时候采用的是就近原则，如果私有过滤器和全局过滤器一致，这时候优先调用私有过滤器
+                dataFormat(dateStr,pattern){
+                    var dt =  new Date(dateStr);
+                    var year = dt.getFullYear();
+                    var month = dt.getMonth()+1;
+                    var day = dt.getDate();
+                    return `${year}-${month}-${day}`;
+                }
+            },
+            directives: {
+                'fontweight':{
+                    bind(el,param){
+                        console.log(param);
+                        el.style.fontWeight = param.value;
+                    }
+                },
+                fontsize(el,param){
+                    el.style.fontSize = param.value + "px";
+                } 
+            }
+        })
+        console.log(1);
+        // document.getElementById('search').focus();
+    </script>
+</body>
+</html>
+

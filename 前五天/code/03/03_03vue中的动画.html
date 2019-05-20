@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(200px);
+        }
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 1s ease-in-out;
+        }
+        .mine-enter,
+        .mine-leave-to{
+            opacity: 0;
+            transform: translateY(80px);
+        }
+        .mine-enter-active,
+        .mine-leave-active{
+            transition: all 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="toggle" @click="flag=!flag">
+        
+        <transition name="" mode="">
+                <h6 v-show="flag">{{msg}}</h6>
+            </transition>
+        <transition name="mine" mode="">
+            <h6 v-show="flag">{{msg}}</h6>
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                msg:'hello world',
+                flag:false
+            },
+            methods: {
+                
+            },
+            filters: {
+                
+            },
+            directives: {
+                
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{msg}}</p>
+        <input type="button" value="get请求" @click="getInfo">
+        <input type="button" value="post请求" @click="postInfo">
+    </div>
+    <script>
+        Vue.http.options.root = 'http://127.0.0.1:8080/';
+        Vue.http.options.emulateJSON = true;
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'hello world'
+            },
+            methods: {
+                getInfo(){
+                   this.$http.get('').then((result)=>{
+                       if(result){
+                           console.log(result.body);
+                       }
+                       else{
+                           return result;
+                       }
+                   }).catch((result)=>{
+                       console.log(result);
+                   });
+                },
+                postInfo(){
+                    //post方法的第三个参数 {emulateJSON:true} 设置content-type = application/x-wwww-form-urlencoded
+                    this.$http.post('http://127.0.0.1:8080/postTest',{"name":"aaron","age":"21"}).then((result)=>{
+                        console.log(result.data);
+                    })
+                }
+            },
+            directives: {
+                // 指令
+            },
+            filters: {
+                //过滤器
+            }
+        })
+    </script>
+</body>
+</html>
